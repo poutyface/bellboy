@@ -34,31 +34,32 @@ static int Random_recieve(int fd, void *data)
 int main()
 {
   int rs;
-  int fd;
+  int fd1, fd2;
 
   rs = BellBoy_create();
   check(rs == succeed, "should success to BellBoy_create");
 
-  // Mapping KEYBOARD(STDIN)
+  // Mapping KEYBOARD(STDIN) -> KeyBoard_recieve
   rs = BellBoy_map(KEYBOARD, KeyBoard_recieve, "KEYBOARD "); 
   check(rs == succeed, "should success to BellBoy_map");
 
-  fd = open("/dev/random", O_RDONLY);
+  fd1 = open("/dev/random", O_RDONLY);
   check(rs == succeed, "should success to open");
-  // Mapping /dev/random
-  rs = BellBoy_map(fd, Random_recieve, "RANDOM "); // /dev/random
+  // Mapping /dev/random -> Random_recieve
+  rs = BellBoy_map(fd1, Random_recieve, "RANDOM "); // /dev/random
   check(rs == succeed, "should success to BellBoy_map");
 
-  fd = open("/dev/urandom", O_RDONLY);
+  fd2 = open("/dev/urandom", O_RDONLY);
   check(rs == succeed, "should success to open");
-  // Mapping /dev/urandom
-  rs = BellBoy_map(fd, Random_recieve, "U-RANDOM "); // /dev/urandom
+  // Mapping /dev/urandom -> Random_recieve
+  rs = BellBoy_map(fd2, Random_recieve, "U-RANDOM "); // /dev/urandom
   check(rs == succeed, "should success to BellBoy_map");
 
   BellBoy_start();
   BellBoy_shutdown();
 
-  close(fd);
+  close(fd1);
+  close(fd2);
 
   return succeed;
 
