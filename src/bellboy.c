@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "check.h"
 #include "boolean.h"
 #include "reciever.h"
+
 
 #define RECIEVERS_MAX (5)
 
@@ -81,13 +85,37 @@ int BellBoy_map(int fd, RecieveCallback recieve, void *data)
 static void bb_select_once()
 {
   int i;
+  fd_set fdreads;
+  int fdmax = 0;
+  int n;
   Reciever *rev;
+  struct timeval tv;
+
+  FD_ZERO(&fdreads);
 
   for(i=0; i<RECIEVERS_MAX && BellBoy->recievers[i] != NULL; ++i){
     rev = BellBoy->recievers[i];
-    rev->call(rev->fd, rev->data);
+
+    FD_SET(rev->fd, &fdreads);
+
+    if(fdmax < rev->fd)
+      fdmax = rev->fd;
   }
 
+  tv.tv_sec = 0;
+  tv.tv_usec = 90000;
+
+  n = select(fdmax+1, &fdreads, NULL, NULL, &tv);
+
+  if(n > 0){
+    for(i=0; i<RECIEVERS_MAX && BellBoy->recievers[i] != NULL; ++i){
+      rev = BellBoy->recievers[i];
+
+      if(FD_ISSET(rev->fd, &fdreads)){
+        rev->call(rev->fd, rev->data);
+      }
+    }
+  }
 }
 
 

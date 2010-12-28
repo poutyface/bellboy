@@ -9,6 +9,7 @@
 static int recieve(int fd, void *data)
 {
   char buf[1024];
+  memset(buf, 0, 1024);
   read(0, buf, 1024);
   log_info("%s", buf);
   return 0;
