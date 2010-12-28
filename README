@@ -50,15 +50,15 @@ int main()
   rs = BellBoy_map(KEYBOARD, KeyBoard_recieve, "KEYBOARD "); 
   check(rs == succeed, "should success to BellBoy_map");
 
+  // Mapping /dev/random -> Random_recieve
   fd1 = open("/dev/random", O_RDONLY);
   check(rs == succeed, "should success to open");
-  // Mapping /dev/random -> Random_recieve
   rs = BellBoy_map(fd1, Random_recieve, "RANDOM "); // /dev/random
   check(rs == succeed, "should success to BellBoy_map");
 
+   // Mapping /dev/urandom -> Random_recieve
   fd2 = open("/dev/urandom", O_RDONLY);
   check(rs == succeed, "should success to open");
-  // Mapping /dev/urandom -> Random_recieve
   rs = BellBoy_map(fd2, Random_recieve, "U-RANDOM "); // /dev/urandom
   check(rs == succeed, "should success to BellBoy_map");
 
