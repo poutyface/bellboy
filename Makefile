@@ -11,6 +11,8 @@ TEST_SRC=$(wildcard test/*_test.c)
 TESTS=$(patsubst %.c,%,${TEST_SRC})
 
 all: build/${LIB_NAME}.a $(TESTS)
+debug: CFLAGS+=-DDEBUG
+debug: all
 
 build/${LIB_NAME}.a: build ${LIB_OBJ}
 	ar rvs $@ ${LIB_OBJ}
@@ -28,5 +30,5 @@ clean:
 ${TESTS}: %: %.c build/${LIB_NAME}.a
 	$(CC) $(CFLAGS) -o $@ $< build/${LIB_NAME}.a
 
-tests: clean all
+tests: debug ${TESTS}
 	./test/bellboy_test

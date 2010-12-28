@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "check.h"
+#include "checker.h"
 #include "boolean.h"
 #include "reciever.h"
 
@@ -95,6 +95,7 @@ static void bb_select_once()
 
   for(i=0; i<RECIEVERS_MAX && BellBoy->recievers[i] != NULL; ++i){
     rev = BellBoy->recievers[i];
+    log_debug("bb_select_once:select %d:%d", i, rev->fd);
 
     FD_SET(rev->fd, &fdreads);
 
@@ -112,6 +113,7 @@ static void bb_select_once()
       rev = BellBoy->recievers[i];
 
       if(FD_ISSET(rev->fd, &fdreads)){
+        log_debug("bb_select_once:call %d:%d", i, rev->fd);
         rev->call(rev->fd, rev->data);
       }
     }
@@ -134,6 +136,7 @@ static int bb_add_new_reciever(Reciever *rev)
   for(i=0; i<RECIEVERS_MAX && BellBoy->recievers[i] != NULL; ++i){}
 
   if(i < RECIEVERS_MAX){
+    log_debug("bb_add_new_reciever: %d", i);
     BellBoy->recievers[i] = rev;
     return succeed;
   }

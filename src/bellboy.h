@@ -11,4 +11,6 @@ void BellBoy_shutdown();
 
 int BellBoy_map(int fd, RecieveCallback recieve, void *data);
 
+#define KEYBOARD (0)
+
 #endif

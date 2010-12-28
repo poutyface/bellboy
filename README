@@ -1,3 +1,11 @@
+Mapped function is called when a file descriptor associated is readable (using select(2)).
+
+
+Example: Watch 3 file descriptors
+ Echo STDIN
+ Print /dev/randum
+ Print /dev/urandum
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -39,19 +47,19 @@ int main()
   rs = BellBoy_create();
   check(rs == succeed, "should success to BellBoy_create");
 
-  // Mapping KEYBOARD(STDIN)
+  // Mapping KEYBOARD(STDIN) -> KeyBoard_recieve callback
   rs = BellBoy_map(KEYBOARD, KeyBoard_recieve, "KEYBOARD "); 
   check(rs == succeed, "should success to BellBoy_map");
 
   fd = open("/dev/random", O_RDONLY);
   check(rs == succeed, "should success to open");
-  // Mapping /dev/random
+  // Mapping /dev/random -> Random_recieve callback
   rs = BellBoy_map(fd, Random_recieve, "RANDOM "); // /dev/random
   check(rs == succeed, "should success to BellBoy_map");
 
   fd = open("/dev/urandom", O_RDONLY);
   check(rs == succeed, "should success to open");
-  // Mapping /dev/urandom
+  // Mapping /dev/urandom -> Random_recieve callback
   rs = BellBoy_map(fd, Random_recieve, "U-RANDOM "); // /dev/urandom
   check(rs == succeed, "should success to BellBoy_map");
 
