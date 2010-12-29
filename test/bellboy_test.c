@@ -17,7 +17,7 @@ static int KeyBoard_receive(int fd, void *data)
   memset(buf, 0, 80);
   read(fd, buf, 80);
   printf("%s %s\n", (unsigned char*)data, buf);
-  return 0;
+  return true;
 }
 
 

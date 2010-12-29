@@ -5,6 +5,7 @@ typedef int (*ReceiveCallback)(int fd, void *data);
 
 typedef struct Receiver{
   int fd;
+  int select_for_read;
   ReceiveCallback call;
   void *data;
 }Receiver;

@@ -90,6 +90,7 @@ int BellBoy_map(int fd, ReceiveCallback receive, void *data)
   check(rev != NULL, "AllocationError");
 
   rev->fd   = fd;
+  rev->select_for_read = true;
   rev->call = receive;
   rev->data = data;
 
@@ -116,6 +117,9 @@ static void bb_select_once()
     Receiver *rev = BellBoy->receivers[i];
     log_debug("bb_select_once:select %d:%d", i, rev->fd);
 
+    if(rev->select_for_read == false)
+      continue;
+
     FD_SET(rev->fd, &fdreads);
 
     if(fdmax < rev->fd)
@@ -130,7 +134,7 @@ static void bb_select_once()
 
       if(FD_ISSET(rev->fd, &fdreads)){
         log_debug("bb_select_once:call %d:%d", i, rev->fd);
-        rev->call(rev->fd, rev->data);
+        rev->select_for_read = rev->call(rev->fd, rev->data);
       }
     }
   }
