@@ -14,8 +14,8 @@
 static int KeyBoard_receive(int fd, void *data)
 {
   char buf[256];
-  memset(buf, 0, 80);
-  read(fd, buf, 80);
+  memset(buf, 0, 256);
+  read(fd, buf, 256);
   printf("%s %s\n", (unsigned char*)data, buf);
   return true;
 }
