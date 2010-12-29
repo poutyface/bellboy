@@ -11,6 +11,7 @@
 
 #define RECEIVERS_MAX (5)
 
+
 typedef struct BellBoy_t{
   int stop_received;
   uint64_t next_heartbeat;
