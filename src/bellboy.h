@@ -14,6 +14,8 @@ int BellBoy_create(BellBoyCallback cb, void *data);
 
 void BellBoy_start();
 
+void BellBoy_stop();
+
 void BellBoy_shutdown();
 
 int BellBoy_map(int fd, ReceiveCallback receive, void *data);

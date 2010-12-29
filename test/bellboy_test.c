@@ -23,9 +23,12 @@ static int KeyBoard_receive(int fd, void *data)
 
 static void BellBoy_receive(BellBoyEvent what, void *data)
 {
+  static int num = 0;
   switch(what){
   case BellBoyHeartbeat:
-    printf("HeartBeat\n");
+    printf("HeartBeat %d\n", num);
+    if(num++ > 5)
+      BellBoy_stop();
     break;
   case BellBoyRuntimeError:
     printf("RuntimeError\n");
