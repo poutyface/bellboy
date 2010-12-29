@@ -1,6 +1,6 @@
 Mapped function is called when a file descriptor associated is readable (using select(2)).
 
-Example: Watch STDIN
+Example: Watching STDIN
 
 #include <stdio.h>
 #include <string.h>
