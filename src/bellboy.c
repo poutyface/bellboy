@@ -48,6 +48,11 @@ void BellBoy_start()
   bb_run();
 }
 
+void BellBoy_stop()
+{
+  BellBoy->stop_recieved = true;
+}
+
 
 void BellBoy_shutdown()
 {
