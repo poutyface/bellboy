@@ -18,6 +18,7 @@ typedef struct BellBoy_t{
   BellBoyCallback cb;
   void *user_data;
   Receiver *receivers[RECEIVERS_MAX];
+  struct timeval select_timeout;
 }BellBoy_t;
 
 
@@ -29,6 +30,7 @@ static int bb_add_new_receiver(Receiver *rev);
 static uint64_t bb_get_time();
 static void bb_heartbeat();
 static void bb_update_next_heartbeat();
+
 
 int BellBoy_create(BellBoyCallback cb, void *data)
 {
@@ -42,6 +44,8 @@ int BellBoy_create(BellBoyCallback cb, void *data)
   BellBoy->heartbeat_interval = 2000000;
   BellBoy->cb = cb;
   BellBoy->user_data = data;
+  BellBoy->select_timeout.tv_sec = 0;
+  BellBoy->select_timeout.tv_usec = 90000;
 
   for(i=0; i<RECEIVERS_MAX; ++i)
     BellBoy->receivers[i] = NULL;
@@ -105,13 +109,11 @@ static void bb_select_once()
   fd_set fdreads;
   int fdmax = 0;
   int n;
-  Receiver *rev;
-  struct timeval tv;
 
   FD_ZERO(&fdreads);
 
   for(i=0; i<RECEIVERS_MAX && BellBoy->receivers[i] != NULL; ++i){
-    rev = BellBoy->receivers[i];
+    Receiver *rev = BellBoy->receivers[i];
     log_debug("bb_select_once:select %d:%d", i, rev->fd);
 
     FD_SET(rev->fd, &fdreads);
@@ -120,14 +122,11 @@ static void bb_select_once()
       fdmax = rev->fd;
   }
 
-  tv.tv_sec = 0;
-  tv.tv_usec = 90000;
-
-  n = select(fdmax+1, &fdreads, NULL, NULL, &tv);
+  n = select(fdmax+1, &fdreads, NULL, NULL, &BellBoy->select_timeout);
 
   if(n > 0){
     for(i=0; i<RECEIVERS_MAX && BellBoy->receivers[i] != NULL; ++i){
-      rev = BellBoy->receivers[i];
+      Receiver *rev = BellBoy->receivers[i];
 
       if(FD_ISSET(rev->fd, &fdreads)){
         log_debug("bb_select_once:call %d:%d", i, rev->fd);
@@ -179,12 +178,15 @@ static void bb_update_next_heartbeat()
   BellBoy->next_heartbeat = bb_get_time() + BellBoy->heartbeat_interval;
 }
 
+
 static void bb_heartbeat()
 {
-  if(BellBoy->next_heartbeat < bb_get_time()){
-    if(BellBoy->cb != NULL)
-      BellBoy->cb(BellBoyHeartbeat, BellBoy->user_data);
+  if(BellBoy->cb == NULL)
+    return;
 
+  if(BellBoy->next_heartbeat <= bb_get_time()){
+    log_debug("%lld, %lld", BellBoy->next_heartbeat, bb_get_time());
+    BellBoy->cb(BellBoyHeartbeat, BellBoy->user_data);
     bb_update_next_heartbeat();
   }
 }
