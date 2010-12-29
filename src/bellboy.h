@@ -1,15 +1,22 @@
 #ifndef _bellboy_h_
 #define _bellboy_h_
 
-#include "reciever.h"
+#include "receiver.h"
 
-int BellBoy_create();
+typedef enum {
+  BellBoyRuntimeError = 100,
+  BellBoyHeartbeat
+}BellBoyEvent;
+
+typedef void (*BellBoyCallback)(BellBoyEvent what, void *data);
+
+int BellBoy_create(BellBoyCallback cb, void *data);
 
 void BellBoy_start();
 
 void BellBoy_shutdown();
 
-int BellBoy_map(int fd, RecieveCallback recieve, void *data);
+int BellBoy_map(int fd, ReceiveCallback receive, void *data);
 
 #define KEYBOARD (0)
 
