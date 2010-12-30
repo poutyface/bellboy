@@ -37,6 +37,8 @@ int BellBoy_create(BellBoyCallback cb, void *data)
 {
   int i;
 
+  check(BellBoy == NULL, "BellBoy have allready allocated");
+
   BellBoy = (BellBoy_t*)malloc(sizeof(BellBoy_t));
   check(BellBoy != NULL, "AllocationError");
 
@@ -79,6 +81,7 @@ void BellBoy_shutdown()
     free(BellBoy->receivers[i]);
 
   free(BellBoy);
+  BellBoy = NULL;
 }
 
 

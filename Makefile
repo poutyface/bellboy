@@ -30,5 +30,6 @@ clean:
 ${TESTS}: %: %.c build/${LIB_NAME}.a
 	$(CC) $(CFLAGS) -o $@ $< build/${LIB_NAME}.a
 
-tests: debug ${TESTS}
+tests: all ${TESTS}
+	./test/functional_test
 	./test/bellboy_test
