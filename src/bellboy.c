@@ -77,6 +77,9 @@ void BellBoy_shutdown()
 {
   int i;
 
+  if(BellBoy == NULL)
+    return;
+
   for(i=0; i<RECEIVERS_MAX && BellBoy->receivers[i] != NULL; ++i)
     free(BellBoy->receivers[i]);
 
