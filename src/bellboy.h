@@ -3,6 +3,8 @@
 
 #include "receiver.h"
 
+#define MAPPING_FD_MAX (5)
+
 typedef enum {
   BellBoyRuntimeError = 100,
   BellBoyHeartbeat

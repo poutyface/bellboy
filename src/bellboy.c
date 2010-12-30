@@ -9,7 +9,7 @@
 #include "boolean.h"
 #include "bellboy.h"
 
-#define RECEIVERS_MAX (5)
+#define RECEIVERS_MAX MAPPING_FD_MAX
 
 
 typedef struct BellBoy_t{
@@ -89,6 +89,8 @@ int BellBoy_map(int fd, ReceiveCallback receive, void *data)
 {
   Receiver *rev = NULL;
   int rs;
+
+  check(receive != NULL, "receive not must be NULL");
 
   rev = (Receiver*)malloc(sizeof(Receiver));
   check(rev != NULL, "AllocationError");
