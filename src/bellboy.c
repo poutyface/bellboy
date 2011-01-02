@@ -8,6 +8,7 @@
 #include "checker.h"
 #include "boolean.h"
 #include "bellboy.h"
+#include "receiver.h"
 
 #define RECEIVERS_MAX MAPPING_FD_MAX
 
@@ -88,7 +89,7 @@ void BellBoy_shutdown()
 }
 
 
-int BellBoy_map(int fd, ReceiveCallback receive, void *data)
+int BellBoy_on(int fd, ReceiveCallback receive, void *data)
 {
   Receiver *rev = NULL;
   int rs;

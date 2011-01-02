@@ -79,10 +79,10 @@ int test_mapping()
 
   rs = BellBoy_create(NULL, NULL);
   mu_assert(rs == succeed, "should success to BellBoy_create");
-  rs = BellBoy_map(0, Callback, NULL);
-  mu_assert(rs == succeed, "should success to BellBoy_map");
-  rs = BellBoy_map(0, NULL, NULL);
-  mu_assert(rs == fail, "should fail to BellBoy_map with NULL Callback");
+  rs = BellBoy_on(0, Callback, NULL);
+  mu_assert(rs == succeed, "should success to BellBoy_on");
+  rs = BellBoy_on(0, NULL, NULL);
+  mu_assert(rs == fail, "should fail to BellBoy_on with NULL Callback");
   BellBoy_shutdown();
 
 
@@ -90,12 +90,12 @@ int test_mapping()
   mu_assert(rs == succeed, "should success to BellBoy_create");
 
   for(i=0; i<=MAPPING_FD_MAX; ++i){
-    rs = BellBoy_map(0, Callback, NULL);
+    rs = BellBoy_on(0, Callback, NULL);
     if(i < MAPPING_FD_MAX){
-      mu_assert(rs == succeed, "should success to BellBoy_map %d", i);
+      mu_assert(rs == succeed, "should success to BellBoy_on %d", i);
     }
     else if(i >= MAPPING_FD_MAX){
-      mu_assert(rs == fail, "should fail to BellBoy_map %d", i);
+      mu_assert(rs == fail, "should fail to BellBoy_on %d", i);
     }
   }
 

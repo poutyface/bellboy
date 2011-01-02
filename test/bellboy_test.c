@@ -45,8 +45,8 @@ int main()
   check(rs == succeed, "should success to BellBoy_create");
 
   // Mapping KEYBOARD(STDIN) -> KeyBoard_recieve
-  rs = BellBoy_map(KEYBOARD, KeyBoard_receive, "KEYBOARD "); 
-  check(rs == succeed, "should success to BellBoy_map");
+  rs = BellBoy_on(KEYBOARD, KeyBoard_receive, "KEYBOARD "); 
+  check(rs == succeed, "should success to BellBoy_on");
 
   BellBoy_start();
   BellBoy_shutdown();
