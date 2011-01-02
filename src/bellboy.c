@@ -14,7 +14,7 @@
 
 
 typedef struct BellBoy_t{
-  int stop_received;
+  char stop_received;
   uint64_t next_heartbeat;
   uint64_t heartbeat_interval;
   BellBoyCallback cb;
