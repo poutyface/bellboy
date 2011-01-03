@@ -10,6 +10,10 @@ LIB_OBJ=${OBJ}
 TEST_SRC=$(wildcard test/*_test.c)
 TESTS=$(patsubst %.c,%,${TEST_SRC})
 
+TEST_HELPER_SRC=$(wildcard test/helpers/*.c)
+TEST_HELPER_OBJ=$(patsubst %.c,%.o,${TEST_HELPER_SRC})
+
+
 all: build/${LIB_NAME}.a $(TESTS)
 debug: CFLAGS+=-DDEBUG
 debug: all
@@ -24,12 +28,15 @@ build:
 clean:
 	rm -rf build
 	rm -rf ${OBJ}
+	rm -rf ${TEST_HELPER_OBJ}
 	rm -rf ${TESTS}
 	rm -rf test/*.dSYM
+	rm -rf tmp/*
 
-${TESTS}: %: %.c build/${LIB_NAME}.a
-	$(CC) $(CFLAGS) -o $@ $< build/${LIB_NAME}.a
+${TESTS}: %: %.c build/${LIB_NAME}.a ${TEST_HELPER_OBJ}
+	$(CC) $(CFLAGS) -Itest/helpers -o $@ $< build/${LIB_NAME}.a ${TEST_HELPER_OBJ}
 
 tests: all ${TESTS}
 	./test/functional_test
+	./test/virtual_device_test
 	./test/bellboy_test
