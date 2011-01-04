@@ -15,7 +15,7 @@ typedef struct Decoder{
 static void* DecoderController_open()
 {
   Decoder *self;
-  printf("\nDecoderController_open\n");
+   printf("\nDecoderController_open\n");
   self = (Decoder*)malloc(sizeof(Decoder));
   return self;
 }

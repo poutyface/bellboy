@@ -40,3 +40,7 @@ tests: all ${TESTS}
 	./test/functional_test
 	./test/virtual_device_test
 	./test/bellboy_test
+
+
+memcheck: all ${TESTS}
+	valgrind --leak-check=full --show-reachable=no ./test/virtual_device_test
