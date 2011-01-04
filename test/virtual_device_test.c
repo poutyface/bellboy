@@ -17,7 +17,8 @@
 static int dispatch(int fd, void *data)
 {
   int rs = 0;
-  Controller *controller;
+  ControllerStore *store;
+  ApplicationController *controller;
   DeviceRequest request;
 
   rs = ioctl(fd, GET, &request);
@@ -27,28 +28,29 @@ static int dispatch(int fd, void *data)
     return false;
   }
 
-  controller = &app.controllers[request.controller];
+  store = &app.controllers[request.controller];
+  controller = store->controller;
 
   switch(request.action){
 
   case OPEN:
-    controller->instance = controller->module->open();
-    request.status = controller->instance != NULL ? succeed : fail;
+    store->instance = controller->open();
+    request.status = store->instance != NULL ? succeed : fail;
     break;
 
   case CLOSE:
-    controller->module->close(controller->instance);
-    controller->instance = NULL;
+    controller->close(store->instance);
+    store->instance = NULL;
     request.status = succeed;
     break;
 
   case UPDATE:
-    rs = controller->module->update(controller->instance, &request.params);
+    rs = controller->update(store->instance, &request.params);
     request.status = rs == succeed ? succeed : fail;
     break;
 
   case PROCESS:
-    rs = controller->module->process(controller->instance, fd);
+    rs = controller->process(store->instance, fd);
     request.status = rs == succeed ? succeed : fail;
     break;
   }
@@ -82,7 +84,7 @@ int main()
 
   fd = open("test/fixtures/sample_data.txt", O_RDONLY);
   rs = BellBoy_on(fd, dispatch, NULL); 
-  check(rs == succeed, "should success to BellBoy_map");
+  check(rs == succeed, "should success to BellBoy_on");
 
   BellBoy_start();
 

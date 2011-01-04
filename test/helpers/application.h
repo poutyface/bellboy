@@ -12,14 +12,14 @@ ApplicationController MainController = {
 };
 
 
-typedef struct Controller{
-  ApplicationController *module;
+typedef struct ControllerStore{
+  ApplicationController *controller;
   void *instance;
-}Controller;
+}ControllerStore;
 
 
 typedef struct Application{
-  Controller controllers[5];
+  ControllerStore controllers[5];
 }Application;
 
 
