@@ -34,8 +34,8 @@ static int dispatch(int fd, void *data)
   switch(request.action){
 
   case OPEN:
-    store->instance = controller->open();
-    request.status = store->instance != NULL ? succeed : fail;
+    rs = controller->open(&store->instance);
+    request.status = rs == succeed ? succeed : fail;
     break;
 
   case CLOSE:

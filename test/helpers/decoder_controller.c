@@ -12,12 +12,19 @@ typedef struct Decoder{
 }Decoder;
 
 
-static void* DecoderController_open()
+static int DecoderController_open(void **instance)
 {
   Decoder *self;
-   printf("\nDecoderController_open\n");
+  printf("\nDecoderController_open\n");
   self = (Decoder*)malloc(sizeof(Decoder));
-  return self;
+  if(self == NULL)
+    return -1;
+
+  self->some_value = 200;
+
+  *instance = (void*)self;
+
+  return 0;
 }
 
 
@@ -34,7 +41,7 @@ static void DecoderController_close(void *instance)
 
 static int DecoderController_update(void *instance, void *params)
 {
-  printf("DecoderController_update\n");
+  printf("DecoderController_update %d\n", ((Decoder*)instance)->some_value);
   return 0;
 }
 
