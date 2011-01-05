@@ -24,4 +24,11 @@ typedef enum {
   PROCESS
 }DeviceRequestAction;
 
+
+typedef enum {
+  MAIN_CONTROLLER = 0,
+  DECODER_CONTROLLER,
+  // Add new index ApplicationController
+}DeviceRequestController;
+
 #endif

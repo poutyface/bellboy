@@ -7,7 +7,4 @@
 
 int vioctl(int fd, int request, void *params);
 
-#define MAIN_CONTROLLER        (0)
-#define DECODER_CONTROLLER     (1)
-
 #endif
